@@ -10,11 +10,7 @@ const colors = ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD'];
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      selColorIdx: 0,
-      guesses: [this.getNewGuess()],
-      code: this.genCode()
-    };
+    this.state = this.getInitialState();
   }
 
   getNewGuess() {
@@ -41,6 +37,26 @@ class App extends Component {
     this.setState({selColorIdx: colorIdx});
   }
 
+  getInitialState() {
+    return {
+      selColorIdx: 0,
+      guesses: [this.getNewGuess()],
+      code: this.genCode()
+    };
+  }
+
+  handlePegSelection = (index) => {
+    let currGuesses = this.state.guesses;
+    currGuesses[currGuesses.length-1].code[index] = this.state.selColorIdx;
+    this.setState({
+      guesses: currGuesses
+    })
+  }
+
+  newGame = () => {
+    this.setState = (this.getInitialState());
+  }
+
   render() {
     let winTries = this.getWinTries();
     return (
@@ -50,6 +66,7 @@ class App extends Component {
           <GameBoard
             colors={colors}
             guesses={this.state.guesses}
+            handlePegSelection={this.handlePegSelection}
           />
           <div className='App-controls'>
             <ColorPicker
@@ -58,7 +75,7 @@ class App extends Component {
               handleColorSelection={this.handleColorSelection}
             />
             <GameTimer />
-            <NewGameButton />
+            <NewGameButton newGame = {this.newGame}/>
           </div>
         </div>
         <footer className='App-header-footer'>
