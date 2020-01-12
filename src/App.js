@@ -85,7 +85,7 @@ class App extends Component {
   }
 
   newGame = () => {
-    this.setState = (this.getInitialState());
+    this.setState(this.getInitialState());
   }
 
   render() {
