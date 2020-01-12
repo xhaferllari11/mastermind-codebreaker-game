@@ -28,7 +28,6 @@ class App extends Component {
   }
 
   getWinTries() {
-    // if winner, return num guesses, otherwise 0 (no winner)
     let lastGuess = this.state.guesses.length - 1;
     return this.state.guesses[lastGuess].score.perfect === 4 ? lastGuess + 1 : 0;
   }
@@ -53,6 +52,38 @@ class App extends Component {
     })
   }
 
+  handleScoreClick = () => {
+    let guesses = this.state.guesses;
+    let lastGuess = guesses[guesses.length-1];
+    let perfectGuesses = [false,false,false,false];
+    let hiddenCode = this.state.code;
+    lastGuess.code.forEach(function(el,ind) {
+      if (el === hiddenCode[ind]) {
+        perfectGuesses[ind] = true;
+      }
+    });
+    let codeNotPerfect = hiddenCode.filter((e,ind)=>{
+      return (perfectGuesses[ind] === false);
+    });
+    lastGuess.score.perfect = 4 - codeNotPerfect.length;
+    let guessNotPerfect = lastGuess.code.filter((e,ind)=>{
+      return (perfectGuesses[ind] === false);
+    });
+    let almosts = 0;
+    codeNotPerfect.forEach((el,ind) => {
+      if (guessNotPerfect.includes(el)){
+        almosts += 1;
+        guessNotPerfect.splice(guessNotPerfect.indexOf(el),1);
+      }
+    })
+    lastGuess.score.almost = almosts;
+    guesses[guesses.length-1] = lastGuess;
+    if (lastGuess.score.perfect < 4 ) {
+      guesses.push(this.getNewGuess())
+    } 
+    this.setState({guesses: guesses}); 
+  }
+
   newGame = () => {
     this.setState = (this.getInitialState());
   }
@@ -67,6 +98,7 @@ class App extends Component {
             colors={colors}
             guesses={this.state.guesses}
             handlePegSelection={this.handlePegSelection}
+            handleScoreClick={this.handleScoreClick}
           />
           <div className='App-controls'>
             <ColorPicker

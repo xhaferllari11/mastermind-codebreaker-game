@@ -10,7 +10,7 @@ const GuessPeg = (props) => (
       cursor: (props.currentGuess) ? 'pointer' : 'default'
     }}
     
-    onClick = {(props.currentGuess) ? () => props.handlePegSelection() : () => console.log(3)}
+    onClick = {(props.currentGuess) ? () => props.handlePegSelection() : () => console.log('pass')}
     />
 );
 
