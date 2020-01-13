@@ -3,14 +3,21 @@ import './App.css';
 import GamePage from '../GamePage/GamePage';
 import SettingsPage from '../SettingsPage/SettingsPage';
 
-import {Route} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
-const colors = ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD'];
+const colors = {
+  'Easy': ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD'],
+  'Moderate': ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD', '#BB82DD'],
+  'Difficult': ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD', '#BB82DD', '#F0E141']
+};
+
+const difficultyOp = ['Easy', 'Moderate', 'Difficult'];
 
 class App extends Component {
   constructor() {
     super();
     this.state = this.getInitialState();
+    this.state.difficulty = 'Easy';
   }
 
   getInitialState() {
@@ -42,7 +49,7 @@ class App extends Component {
   }
 
   handleColorSelection = (colorIdx) => {
-    this.setState({selColorIdx: colorIdx});
+    this.setState({ selColorIdx: colorIdx });
   }
 
   handleNewGameClick = () => {
@@ -55,7 +62,7 @@ class App extends Component {
 
     // Always replace objects/arrays with NEW ones
     let guessesCopy = [...this.state.guesses];
-    let guessCopy = {...guessesCopy[currentGuessIdx]};
+    let guessCopy = { ...guessesCopy[currentGuessIdx] };
     let codeCopy = [...guessCopy.code];
 
     // Update the NEW code array with the currently selected color
@@ -69,7 +76,7 @@ class App extends Component {
 
     // Update state with the NEW guesses array
     this.setState({
-        guesses: guessesCopy
+      guesses: guessesCopy
     });
   }
 
@@ -108,10 +115,10 @@ class App extends Component {
     });
 
     // State must only be updated with NEW objects/arrays
-        // Always replace objects/arrays with NEW ones
+    // Always replace objects/arrays with NEW ones
     let guessesCopy = [...this.state.guesses];
-    let guessCopy = {...guessesCopy[currentGuessIdx]};
-    let scoreCopy = {...guessCopy.score};
+    let guessCopy = { ...guessesCopy[currentGuessIdx] };
+    let scoreCopy = { ...guessCopy.score };
 
     // Set scores
     scoreCopy.perfect = perfect;
@@ -137,27 +144,34 @@ class App extends Component {
     return (
       <div className="App">
         <header className='App-header-footer'>R E A C T &nbsp;&nbsp;&nbsp;  M A S T E R M I N D</header>
-        <switch>
-        <Route exact path='/' render={() => (
-          <GamePage
-          winTries={winTries}
-          colors={colors}
-          selColorIdx={this.state.selColorIdx}
-          guesses={this.state.guesses}
-          handleColorSelection={this.handleColorSelection}
-          handleNewGameClick={this.handleNewGameClick}
-          handlePegClick={this.handlePegClick}
-          handleScoreClick={this.handleScoreClick}
+        <Switch>
+          <Route exact path='/' render={() => (
+            <GamePage
+              winTries={winTries}
+              colors={colors[this.state.difficulty]}
+              selColorIdx={this.state.selColorIdx}
+              guesses={this.state.guesses}
+              handleColorSelection={this.handleColorSelection}
+              handleNewGameClick={this.handleNewGameClick}
+              handlePegClick={this.handlePegClick}
+              handleScoreClick={this.handleScoreClick}
+            />
+          )} />
+          <Route path='/settings' render={(props) => (
+            <SettingsPage
+              {...props}
+              difficultyOp={difficultyOp}
+              colors={colors}
+            />
+          )}
           />
-        )} />
-        <Route path='/settings' render={(props) => (
-          <SettingsPage {...props}/>
-        )}
-        />
-        </switch>
+        </Switch>
       </div>
     );
   }
 }
 
 export default App;
+
+
+
