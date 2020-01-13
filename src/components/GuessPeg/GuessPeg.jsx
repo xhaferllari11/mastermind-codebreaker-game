@@ -7,11 +7,10 @@ const GuessPeg = (props) => (
     style={{
       backgroundColor: props.color,
       border: props.color ? `1px solid ${props.color}`: '1px dashed grey',
-      cursor: (props.currentGuess) ? 'pointer' : 'default'
+      cursor: props.currentGuess && 'pointer'
     }}
-    
-    onClick = {(props.currentGuess) ? () => props.handlePegSelection() : () => console.log('pass')}
-    />
+    onClick={props.currentGuess ? props.handlePegClick : null}
+  />
 );
 
 export default GuessPeg;
