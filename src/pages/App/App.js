@@ -7,8 +7,8 @@ import { Switch, Route } from 'react-router-dom';
 
 const colors = {
   'Easy': ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD'],
-  'Moderate': ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD', '#BB82DD'],
-  'Difficult': ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD', '#BB82DD', '#F0E141']
+  'Moderate': ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD', '#BB821D'],
+  'Difficult': ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD', '#BB821D', '#F0E141']
 };
 
 const difficultyOp = ['Easy', 'Moderate', 'Difficult'];
@@ -54,6 +54,7 @@ class App extends Component {
 
   handleNewGameClick = () => {
     this.setState(this.getInitialState());
+    // then Route to home page '/'
   }
 
   handlePegClick = (pegIdx) => {
@@ -81,17 +82,10 @@ class App extends Component {
   }
 
   handleScoreClick = () => {
-    // Need the index of the current guess object (last object in guesses array)
     let currentGuessIdx = this.state.guesses.length - 1;
-
-    // Create "working" copies of the "guessed" code and the secret
-    // code so that we can modify them as we compute the number of
-    // perfect and almost without messing up the actual ones in state
     let guessCodeCopy = [...this.state.guesses[currentGuessIdx].code];
     let secretCodeCopy = [...this.state.code];
-
     let perfect = 0, almost = 0;
-
     // First pass computes number of "perfect"
     guessCodeCopy.forEach((code, idx) => {
       if (secretCodeCopy[idx] === code) {
@@ -109,13 +103,11 @@ class App extends Component {
       let foundIdx = secretCodeCopy.indexOf(code);
       if (foundIdx > -1) {
         almost++;
-        // Again, ensure same choice is not matched again
+        //ensure same choice is not matched again
         secretCodeCopy[foundIdx] = null;
       }
     });
 
-    // State must only be updated with NEW objects/arrays
-    // Always replace objects/arrays with NEW ones
     let guessesCopy = [...this.state.guesses];
     let guessCopy = { ...guessesCopy[currentGuessIdx] };
     let scoreCopy = { ...guessCopy.score };
@@ -123,24 +115,24 @@ class App extends Component {
     // Set scores
     scoreCopy.perfect = perfect;
     scoreCopy.almost = almost;
-
-    // Update the NEW guess with the NEW score object
     guessCopy.score = scoreCopy;
-
-    // Update the NEW guesses with the NEW guess object
     guessesCopy[currentGuessIdx] = guessCopy;
 
     // Add a new guess if not a winner
     if (perfect !== 4) guessesCopy.push(this.getNewGuess());
 
-    // Finally, update the state with the NEW guesses array
     this.setState({
       guesses: guessesCopy
     });
   }
 
+  handleDifficultyClick = (d) => {
+    this.setState({difficulty:d}, this.handleNewGameClick())
+  }
+
   render() {
     let winTries = this.getWinTries();
+
     return (
       <div className="App">
         <header className='App-header-footer'>R E A C T &nbsp;&nbsp;&nbsp;  M A S T E R M I N D</header>
@@ -160,8 +152,10 @@ class App extends Component {
           <Route path='/settings' render={(props) => (
             <SettingsPage
               {...props}
+              currentDifficulty={this.state.difficulty}
               difficultyOp={difficultyOp}
               colors={colors}
+              handleDifficultyClick={this.handleDifficultyClick}
             />
           )}
           />

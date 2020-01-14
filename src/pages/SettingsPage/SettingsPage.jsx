@@ -10,8 +10,11 @@ const SettingsPage = (props) => {
             <h1>Set Difficulty Level</h1>
             {props.difficultyOp.map( (diff,index) => 
                 <SettingsOptions
+                    {...props}
+                    currentDifficulty={diff===props.currentDifficulty}
                     difficulty={diff}
                     colors={props.colors[diff]}
+                    handleDifficultyClick={props.handleDifficultyClick}
                     key={index}
                 />
             )}
@@ -19,7 +22,7 @@ const SettingsPage = (props) => {
             <Link
                 to='/'
                 className='btn btn-default'
-            >Home</Link>
+            >Cancel</Link>
             
         </div>
     );
