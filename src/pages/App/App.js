@@ -18,13 +18,26 @@ class App extends Component {
     super();
     this.state = this.getInitialState();
     this.state.difficulty = 'Easy';
+    console.log('constructor ran')
+  }
+
+  componentDidMount() {
+    console.log('app mount');
+  }
+
+  componentDidUpdate(){
+  }
+
+  componentWillUnmount(){
+    console.log('will unmount');
   }
 
   getInitialState() {
     return {
       selColorIdx: 0,
       guesses: [this.getNewGuess()],
-      code: this.genCode()
+      code: this.genCode(),
+      elapstedTime: 0
     };
   }
 
@@ -47,6 +60,11 @@ class App extends Component {
     let lastGuess = this.state.guesses.length - 1;
     return this.state.guesses[lastGuess].score.perfect === 4 ? lastGuess + 1 : 0;
   }
+
+  handleTimerUpdate = () => {
+    this.setState((state) => ({elapstedTime: ++state.elapstedTime}));
+  }
+
 
   handleColorSelection = (colorIdx) => {
     this.setState({ selColorIdx: colorIdx });
@@ -120,6 +138,7 @@ class App extends Component {
 
     // Add a new guess if not a winner
     if (perfect !== 4) guessesCopy.push(this.getNewGuess());
+    
 
     this.setState({
       guesses: guessesCopy
@@ -132,7 +151,6 @@ class App extends Component {
 
   render() {
     let winTries = this.getWinTries();
-
     return (
       <div className="App">
         <header className='App-header-footer'>R E A C T &nbsp;&nbsp;&nbsp;  M A S T E R M I N D</header>
@@ -147,6 +165,8 @@ class App extends Component {
               handleNewGameClick={this.handleNewGameClick}
               handlePegClick={this.handlePegClick}
               handleScoreClick={this.handleScoreClick}
+              timer={this.state.elapstedTime}
+              handleTimerUpdate={this.handleTimerUpdate}
             />
           )} />
           <Route path='/settings' render={(props) => (
