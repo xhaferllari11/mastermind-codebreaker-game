@@ -18,11 +18,10 @@ class GameTimer extends React.Component {
   }
 
   handleTick = () => {
-    this.props.handleTimerUpdate();
+    if (!this.props.winTries) this.props.handleTimerUpdate();
   }
 
   render() {
-  if (this.props.winTries) {clearInterval(this.timerId)};
   return (
   <div className={`${styles.GameTimer} flex-h`}>
     {formatTime(this.props.timer)}
