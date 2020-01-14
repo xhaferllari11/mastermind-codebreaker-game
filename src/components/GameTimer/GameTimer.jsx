@@ -22,6 +22,7 @@ class GameTimer extends React.Component {
   }
 
   render() {
+  if (this.props.winTries) {clearInterval(this.timerId)};
   return (
   <div className={`${styles.GameTimer} flex-h`}>
     {formatTime(this.props.timer)}

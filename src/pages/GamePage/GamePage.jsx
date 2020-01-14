@@ -25,6 +25,7 @@ const GamePage = (props) => {
           <GameTimer
             timer={props.timer}
             handleTimerUpdate={props.handleTimerUpdate}
+            winTries={props.winTries}
           />
           <Link
             className='btn btn-default Gamepage-link-margin'
