@@ -29,6 +29,10 @@ const GamePage = (props) => {
           />
           <Link
             className='btn btn-default Gamepage-link-margin'
+            to='/high-scores'
+          >High Scores</Link>
+          <Link
+            className='btn btn-default Gamepage-link-margin'
             to='/settings'
           >Settings</Link>
           <NewGameButton handleNewGameClick={props.handleNewGameClick}/>

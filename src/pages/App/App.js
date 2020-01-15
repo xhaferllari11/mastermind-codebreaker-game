@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import GamePage from '../GamePage/GamePage';
 import SettingsPage from '../SettingsPage/SettingsPage';
+import HighScorePage from '../HighScorePage/HighScorePage';
 
 import { Switch, Route } from 'react-router-dom';
 
@@ -18,6 +19,23 @@ class App extends Component {
     super();
     this.state = this.getInitialState();
     this.state.difficulty = 'Easy';
+    this.state.highScores = [
+      {
+        initials: 'ax',
+        guesses: 3,
+        seconds: 102
+      },
+      {
+        initials: 'BBB',
+        guesses: 1,
+        seconds: 3
+      },
+      {
+        initials: 'DJS',
+        guesses: 6,
+        seconds: 42
+      }
+    ];
     console.log('constructor ran')
   }
 
@@ -25,10 +43,10 @@ class App extends Component {
     console.log('app mount');
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     console.log('will unmount');
   }
 
@@ -62,7 +80,7 @@ class App extends Component {
   }
 
   handleTimerUpdate = () => {
-    this.setState((state) => ({elapstedTime: ++state.elapstedTime}));
+    this.setState((state) => ({ elapstedTime: ++state.elapstedTime }));
   }
 
 
@@ -136,17 +154,43 @@ class App extends Component {
     guessCopy.score = scoreCopy;
     guessesCopy[currentGuessIdx] = guessCopy;
 
-    // Add a new guess if not a winner
-    if (perfect !== 4) guessesCopy.push(this.getNewGuess());
-    
+
+    if (perfect !== 4) {
+      guessesCopy.push(this.getNewGuess())
+    } else if (perfect === 4) {
+      // winner logic
+      let initials = prompt('enter initials');
+      let highScore = {
+        initials: initials,
+        guesses: guessesCopy.length,
+        seconds: this.state.elapstedTime
+      };
+      fetch('localhost:3001/api/scores', {
+        method: 'POST', // or 'PUT'
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify(highScore),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+
 
     this.setState({
       guesses: guessesCopy
     });
+
+
   }
 
   handleDifficultyClick = (d) => {
-    this.setState({difficulty:d}, this.handleNewGameClick())
+    this.setState({ difficulty: d }, this.handleNewGameClick())
   }
 
   render() {
@@ -177,6 +221,10 @@ class App extends Component {
               colors={colors}
               handleDifficultyClick={this.handleDifficultyClick}
             />
+          )}
+          />
+          <Route path='/high-scores' render={(props) => (
+            <HighScorePage highScores={this.state.highScores} />
           )}
           />
         </Switch>

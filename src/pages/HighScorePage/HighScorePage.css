@@ -1,0 +1,17 @@
+.high-score-page {
+    padding: auto;
+    text-align: center;
+}
+
+.high-score-title{
+    color: gray;
+    text-align: center;
+    margin: auto 0;
+
+}
+
+.high-score-table{
+    margin-left: auto;
+    margin-right: auto;
+    width: 200px;
+}
