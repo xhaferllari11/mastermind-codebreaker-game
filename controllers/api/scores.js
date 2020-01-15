@@ -1,12 +1,18 @@
 const Score = require('../../models/score')
 
 function scoreCreate(req, res, next) {
-    console.log(req.body);
-    res.send('cool');
-}
+    Score.create(req.body, function(e,score){
+        if (e) console.log(e);
+        res.status(200).json(score);
+    });
+};
 
 function scoreIndex(req, res) {
-    res.send('alban')
+    Score.find({},function(e,scores){
+        if (e) console.log(e);
+        console.log(scores);
+        res.status(201).json(scores);
+    })
 }
 
 module.exports = {

@@ -3,7 +3,7 @@ import './App.css';
 import GamePage from '../GamePage/GamePage';
 import SettingsPage from '../SettingsPage/SettingsPage';
 import HighScorePage from '../HighScorePage/HighScorePage';
-
+import {index} from '../../utils/scoreService';
 import { Switch, Route } from 'react-router-dom';
 
 const colors = {
@@ -41,6 +41,7 @@ class App extends Component {
 
   componentDidMount() {
     console.log('app mount');
+    
   }
 
   componentDidUpdate() {
@@ -165,15 +166,19 @@ class App extends Component {
         guesses: guessesCopy.length,
         seconds: this.state.elapstedTime
       };
-      fetch('localhost:3001/api/scores', {
+
+
+      // this will need to put in a utils
+      fetch('/api/scores', {
         method: 'POST', // or 'PUT'
         headers: {
           'Content-Type': 'application/json',
         },
-        data: JSON.stringify(highScore),
+        body: JSON.stringify(highScore),
       })
         .then((response) => response.json())
         .then((data) => {
+          // route to new page
           console.log('Success:', data);
         })
         .catch((error) => {
