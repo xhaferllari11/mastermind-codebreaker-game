@@ -3,7 +3,7 @@ import './App.css';
 import GamePage from '../GamePage/GamePage';
 import SettingsPage from '../SettingsPage/SettingsPage';
 import HighScorePage from '../HighScorePage/HighScorePage';
-import {index} from '../../utils/scoreService';
+import { index, create } from '../../utils/scoreService';
 import { Switch, Route } from 'react-router-dom';
 
 const colors = {
@@ -19,37 +19,27 @@ class App extends Component {
     super();
     this.state = this.getInitialState();
     this.state.difficulty = 'Easy';
-    this.state.highScores = [
-      {
-        initials: 'ax',
-        guesses: 3,
-        seconds: 102
-      },
-      {
-        initials: 'BBB',
-        guesses: 1,
-        seconds: 3
-      },
-      {
-        initials: 'DJS',
-        guesses: 6,
-        seconds: 42
-      }
-    ];
-    console.log('constructor ran')
+    this.state.highScores = [];
   }
-
+  
   componentDidMount() {
-    console.log('app mount');
-    
-  }
-
+    this.populateHighScores();
+  };
+  
   componentDidUpdate() {
   }
 
   componentWillUnmount() {
     console.log('will unmount');
   }
+
+
+  populateHighScores() {
+    index().then(data => {
+      this.setState({ highScores: data })
+    });
+  }
+
 
   getInitialState() {
     return {
@@ -166,32 +156,20 @@ class App extends Component {
         guesses: guessesCopy.length,
         seconds: this.state.elapstedTime
       };
-
-
-      // this will need to put in a utils
-      fetch('/api/scores', {
-        method: 'POST', // or 'PUT'
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(highScore),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // route to new page
-          console.log('Success:', data);
-        })
-        .catch((error) => {
+      //persist to database
+      create(highScore).then((data) => {
+        // route to new page
+        console.log('Success:', data);
+        this.populateHighScores();
+        // this.props.history.push('/high-scores')
+      }).catch((error) => {
           console.error('Error:', error);
-        });
+      });
     }
-
 
     this.setState({
       guesses: guessesCopy
     });
-
-
   }
 
   handleDifficultyClick = (d) => {
@@ -204,8 +182,9 @@ class App extends Component {
       <div className="App">
         <header className='App-header-footer'>R E A C T &nbsp;&nbsp;&nbsp;  M A S T E R M I N D</header>
         <Switch>
-          <Route exact path='/' render={() => (
+          <Route exact path='/' render={(props) => (
             <GamePage
+              {...props}
               winTries={winTries}
               colors={colors[this.state.difficulty]}
               selColorIdx={this.state.selColorIdx}

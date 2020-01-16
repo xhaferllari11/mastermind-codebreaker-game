@@ -1,14 +1,19 @@
 import React from 'react';
 import styles from './ScoreButton.module.css';
 
-const ScoreButton = (props) => (
-  <button
+const ScoreButton = (props) => {
+  function handleScoreClick(){
+    props.handleScoreClick();
+    console.log(props);
+  }
+
+  return (<button
     className={`${styles.button} btn btn-default`}
     disabled={props.disabled}
-    onClick={props.handleScoreClick}
+    onClick={() => handleScoreClick()}
   >
     ✔
-  </button>
-);
+  </button>)
+};
 
 export default ScoreButton;

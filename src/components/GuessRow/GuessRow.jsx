@@ -21,6 +21,7 @@ const GuessRow = (props) => (
     {
       props.currentGuess && props.guess.score.perfect !== 4 ?
         <ScoreButton
+          {...props} // i passed in props thinkin i could change history after a score is winner to redirect to high score
           disabled={props.guess.code.includes(null)}
           handleScoreClick={props.handleScoreClick}
         /> :

@@ -18,7 +18,6 @@ const SettingsPage = (props) => {
                     key={index}
                 />
             )}
-            
             <Link
                 to='/'
                 className='btn btn-default'

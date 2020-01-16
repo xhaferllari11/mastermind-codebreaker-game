@@ -8,9 +8,11 @@ function scoreCreate(req, res, next) {
 };
 
 function scoreIndex(req, res) {
-    Score.find({},function(e,scores){
+    Score.find({})
+    .sort('guesses')
+    .sort('seconds')
+    .exec(function(e,scores){
         if (e) console.log(e);
-        console.log(scores);
         res.status(201).json(scores);
     })
 }

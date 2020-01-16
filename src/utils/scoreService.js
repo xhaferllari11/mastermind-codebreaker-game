@@ -1,18 +1,17 @@
 const url = '/api/scores';
 
-function index(){
+function index() {
     return fetch(url).then(res => res.json());
 }
 
-function create(){
-    const options = {
-        method: 'POST',
+function create(highScore) {
+    return fetch('/api/scores', {
+        method: 'POST', // or 'PUT'
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
-        body: 2
-    }
-    return 2;
+        body: JSON.stringify(highScore),
+    }).then(response => response.json());
 }
 
 module.exports = {

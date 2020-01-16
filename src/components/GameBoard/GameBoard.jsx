@@ -6,6 +6,7 @@ const GameBoard = (props) => (
   <div className={styles.GameBoard}>
     {props.guesses.map((guess, idx) =>
       <GuessRow
+        {...props}
         guess={guess}
         colors={props.colors}
         rowIdx={idx}

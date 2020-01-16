@@ -11,6 +11,7 @@ const GamePage = (props) => {
     <div className="App">
       <div className="flex-h align-flex-end">
         <GameBoard
+          {...props}
           colors={props.colors}
           guesses={props.guesses}
           handlePegClick={props.handlePegClick}
