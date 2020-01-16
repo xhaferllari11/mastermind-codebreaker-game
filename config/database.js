@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-// need to change db to my own on heroku
-mongoose.connect('mongodb://localhost/mastermind', {
+mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true 
+    useUnifiedTopology: true,
+    useCreateIndex: true
 });
 
 const db = mongoose.connection;
