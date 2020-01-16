@@ -4,7 +4,7 @@ import GamePage from '../GamePage/GamePage';
 import SettingsPage from '../SettingsPage/SettingsPage';
 import HighScorePage from '../HighScorePage/HighScorePage';
 import { index, create } from '../../utils/scoreService';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 
 const colors = {
   'Easy': ['#7CCCE5', '#FDE47F', '#E04644', '#B576AD'],
@@ -161,7 +161,7 @@ class App extends Component {
         // route to new page
         console.log('Success:', data);
         this.populateHighScores();
-        // this.props.history.push('/high-scores')
+        this.props.history.push('/high-scores')
       }).catch((error) => {
           console.error('Error:', error);
       });
@@ -217,7 +217,7 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
 
 
 
